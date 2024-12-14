@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: SSh to ec2 with minkube
-        run: ssh -i ${{sangini.PEM_FILE}} ubuntu@13.53.127.64 -y
+        run: ssh -i "sangini.pem" ubuntu@ec2-13-53-127-64.eu-north-1.compute.amazonaws.com -y
       - name: Clone project
         run: git clone https://github.com/SanginiMiharia/Project.git
 
