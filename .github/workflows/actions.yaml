@@ -84,3 +84,5 @@ jobs:
           helm upgrade --install simple-webapp ./helm-chart \
             --set image.repository=sanginimiharia2002/simple-webapp \
             --set image.tag=latest
+
+            #try
