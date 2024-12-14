@@ -82,5 +82,5 @@ jobs:
       - name: Deploy to Kubernetes with Helm
         run: |
           helm upgrade --install simple-webapp ./helm-chart \
-            --set image.repository=vaibhavrawat/simple-webapp \
+            --set image.repository=sanginimiharia2002/simple-webapp \
             --set image.tag=latest
