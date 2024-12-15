@@ -7,6 +7,9 @@ on:
 jobs:
    build:
      runs-on: ubuntu-latest
+     permissions:
+      contents: write
+      security-events: write # Required for CodeQL SARIF upload
      steps:
        - name: Checkout code
          uses: actions/checkout@v3
@@ -71,21 +74,20 @@ jobs:
        - name: Perform CodeQL Analysis
          uses: github/codeql-action/analyze@v2
          with:
-          category: 'security'
-         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          category: 'security' # For security alerts in GitHub
+          output: codeql-results.sarif
 
-       - name: Check SARIF File
+       - name: Inspect SARIF File
          run: |
-          echo "Checking if SARIF file exists..."
-          ls -l .github/workflows/codeql-results.sarif
-          cat .github/workflows/codeql-results.sarif || echo "SARIF file is empty or not generated."
+          echo "SARIF file details:"
+          ls -l codeql-results.sarif
+          cat codeql-results.sarif || echo "SARIF file is empty."
 
        - name: Upload SARIF File for Debugging
          uses: actions/upload-artifact@v3
          with:
           name: CodeQL-SARIF
-          path: .github/workflows/codeql-results.sarif
+          path: codeql-results.sarif
 
 
 
