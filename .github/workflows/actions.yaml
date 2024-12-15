@@ -50,6 +50,10 @@ jobs:
          run: |
            npm install -g snyk
 
+       # Authenticate with Snyk using the API token
+       - name: Authenticate with Snyk
+         run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
        # Run SCA (Snyk)
        - name: Run SCA with Snyk
          run: snyk test --all-projects
