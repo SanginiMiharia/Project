@@ -165,9 +165,10 @@ jobs:
 
       - name: Run DAST Scan
         run: |
-          docker run --network host zaproxy/zap-stable zap.sh -quickurl http://192.168.49.2:30001 \
-            -quickout zap_report.html \
-            -timeout 300 || exit 1
+          docker run --network host -v ${{ github.workspace }}:/zap/wrk zaproxy/zap-stable zap.sh \
+          -quickurl http://192.168.49.2:30001 \
+          -quickout /zap/wrk/zap_report.html \
+          -timeout 300 || exit 1
 
       - name: Upload DAST Report
         uses: actions/upload-artifact@v3
