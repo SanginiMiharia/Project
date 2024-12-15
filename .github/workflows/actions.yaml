@@ -10,6 +10,12 @@ jobs:
      steps:
        - name: Checkout code
          uses: actions/checkout@v3
+      # Secret Scanning Step
+       - name: Run Secret Scanning
+         run: |
+           # Using Gitleaks as an example for secret scanning
+           curl -sSL https://raw.githubusercontent.com/zricethezav/gitleaks/master/scripts/install.sh | bash
+           gitleaks detect --source=. --verbose
        - name: Add Docker's GPG key and repository
          run: >
            sudo apt-get update
@@ -40,6 +46,22 @@ jobs:
            password: ${{ secrets.DOCKER_PASSWORD }}
        - name: Check docker is working fine
          run: docker ps
+      # Source Composition Analysis (SCA)
+       - name: Run SCA (Snyk as an example)
+         run: |
+           curl -sL https://snyk.io/get-cli | bash
+           snyk test --all-projects
+
+       # Static Application Security Testing (SAST)
+       - name: Run SAST (SonarQube as an example)
+         run: |
+           curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+           unzip sonar-scanner.zip -d sonar-scanner
+           ./sonar-scanner/bin/sonar-scanner \
+             -Dsonar.projectKey=my-project-key \
+             -Dsonar.sources=. \
+             -Dsonar.host.url=https://sonarcloud.io \
+             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
        - name: Build Docker image
          run: |
            docker build -t sanginimiharia2002/simple-webapp .
@@ -93,5 +115,9 @@ jobs:
           helm upgrade --install simple-webapp ./helm-chart \
             --set image.repository=sanginimiharia2002/simple-webapp \
             --set image.tag=latest
+       # Dynamic Application Security Testing (DAST)
+      # Assuming OWASP ZAP is installed and configured on your EC2 instance.
+      - name: Run DAST Scan with OWASP ZAP 
+        run: zap-cli quick-scan --self-contained --spider http://your-app-url.com
 
             
