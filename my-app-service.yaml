@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,15 +16,11 @@ spec:
         app: simple-webapp
     spec:
       containers:
-      - name:  simple-webapp
-        image: sanginimiharia2002/simple-webapp
-        ports:
-        - containerPort: 3000
-        # envFrom:
-        # - secretRef:
-        #     name: dotfile-secret
+        - name: simple-webapp
+          image: sanginimiharia2002/simple-webapp
+          ports:
+            - containerPort: 3000
 
-      
 ---
 apiVersion: v1
 kind: Service
