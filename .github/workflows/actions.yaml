@@ -148,11 +148,12 @@ jobs:
 
       - name: Start OWASP ZAP
         run: |
-          docker run -d -u zap -p 8080:8080 owasp/zap2docker-stable zap.sh -daemon -port 8080 -host 0.0.0.0
+          docker run -d -u zap -p 8080:8080 owasp/zap2docker-stable zap.sh -daemon -port 8080 -host 0.0.0.0 || exit 1
 
+      # Wait for ZAP to start (consider adding a health check instead)
       - name: Wait for ZAP to start
         run: |
-          sleep 30 # Wait for ZAP to start up
+          sleep 30 
 
       - name: Run DAST Scan
         run: |
