@@ -53,7 +53,7 @@ jobs:
 
        # Authenticate with Snyk using the API token
        - name: Authenticate with Snyk
-         run: sudo apt install wslu
+         run: npm install wslu -y
           echo 'export BROWSER=wslview' >> ~/.bashrc
           source ~/.bashrc
           snyk auth ${{ secrets.SNYK_TOKEN }}
