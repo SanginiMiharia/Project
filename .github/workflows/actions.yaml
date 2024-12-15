@@ -61,6 +61,25 @@ jobs:
           name: Trivy-SCA-Report
           path: ./trivy_sca_report.txt
 
+    # Step 4: Static Application Security Testing (SAST) with CodeQL
+
+       - name: Initialize CodeQL database
+         uses: github/codeql-action/init@v2
+         with:
+            languages: 'javascript,python'
+  
+       - name: Perform CodeQL Analysis
+         uses: github/codeql-action/analyze@v2
+         with:
+            category: 'security'
+    # Step 5: Upload SAST Report
+       - name: Upload CodeQL Analysis Results
+         uses: actions/upload-artifact@v3
+         with:
+          name: CodeQL-Report
+          path: ./.github/workflows/codeql-results.sarif
+
+
 
     
 
@@ -118,9 +137,18 @@ jobs:
           helm upgrade --install simple-webapp ./helm-chart \
             --set image.repository=sanginimiharia2002/simple-webapp \
             --set image.tag=latest
-       # Dynamic Application Security Testing (DAST)
-      # Assuming OWASP ZAP is installed and configured on your EC2 instance.
-      - name: Run DAST Scan with OWASP ZAP 
-        run: zap-cli quick-scan --self-contained --spider http://your-app-url.com
+      # Step 4: DAST Scan with OWASP ZAP
+      - name: Run DAST Scan with OWASP ZAP
+        run: |
+          docker run -u zap -v ${{ github.workspace }}:/zap/wrk/:rw \
+          -t owasp/zap2docker-stable zap-baseline.py \
+          -t http://your-app-url.com -g gen.conf -r dast_report.html
+
+      - name: Upload DAST Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: DAST-Report
+          path: ./dast_report.html
+       
 
             #TRY
