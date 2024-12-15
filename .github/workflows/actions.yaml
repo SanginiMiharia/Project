@@ -72,6 +72,12 @@ jobs:
          uses: github/codeql-action/analyze@v2
          with:
             category: 'security'
+       - name: Perform CodeQL Analysis
+         uses: github/codeql-action/analyze@v2
+         with:
+            category: 'security'
+         env:
+              GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
     # Step 5: Upload SAST Report
        - name: Upload CodeQL Analysis Results
          uses: actions/upload-artifact@v3
