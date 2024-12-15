@@ -54,8 +54,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: SSh to ec2 with minkube
-        run: ssh -i ${{secrets.PEM_FILE}} ubuntu@51.20.98.144 -y
+      #- name: SSh to ec2 with minkube
+      #  run: ssh -i ${{secrets.PEM_FILE}} ubuntu@51.20.98.144 -y
+
+      - name: Create SSH key file
+        run: |
+          echo "${{ secrets.PEM_FILE }}" > ~/my_key.pem
+          chmod 600 ~/my_key.pem
+
+      - name: SSH to EC2 with Minikube
+        run: ssh -i ~/my_key.pem -o StrictHostKeyChecking=no ubuntu@51.20.98.144
+
       - name: Clone project
         run: git clone https://github.com/SanginiMiharia/Project.git
 
