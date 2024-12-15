@@ -45,11 +45,14 @@ jobs:
            password: ${{ secrets.DOCKER_PASSWORD }}
        - name: Check docker is working fine
          run: docker ps
-      # Source Composition Analysis (SCA)
-       - name: Run SCA (Snyk as an example)
+      # Source Composition Analysis (SCA) using npm to install Snyk
+       - name: Install Snyk CLI
          run: |
-           curl -sL https://snyk.io/get-cli | bash
-           snyk test --all-projects
+           npm install -g snyk
+
+       # Run SCA (Snyk)
+       - name: Run SCA with Snyk
+         run: snyk test --all-projects
 
        # Static Application Security Testing (SAST)
        - name: Run SAST (SonarQube as an example)
