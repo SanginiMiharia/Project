@@ -145,38 +145,24 @@ jobs:
             --set image.tag=latest
       # Step 4: DAST Scan with OWASP ZAP
 
-      - name: Install Docker
-        run: >
-           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-           docker-buildx-plugin docker-compose-plugin
-      - name: Check if Docker is working
-        run: sudo docker run hello-world
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-           username: ${{ secrets.DOCKER_USERNAME }}
-           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Check docker is working fine
-        run: docker ps
 
-
-      - name: Pull OWASP ZAP Docker Image
-        run: docker pull owasp/zap2docker-stable:latest
-
-      - name: Run OWASP ZAP Scan
+      - name: Start OWASP ZAP
         run: |
-          docker run -u zap \
-          -v $(pwd):/zap/wrk/:rw \
-          owasp/zap2docker-stable:latest zap-baseline.py \
-          -t http://192.168.49.2:30001 \
-          -r zap_report.html
-      
+          docker run -d -u zap -p 8080:8080 owasp/zap2docker-stable zap.sh -daemon -port 8080 -host 0.0.0.0
 
-      - name: Upload ZAP Report
+      - name: Wait for ZAP to start
+        run: |
+          sleep 30 # Wait for ZAP to start up
+
+      - name: Run DAST Scan
+        run: |
+          docker run --network host owasp/zap2docker-stable zap.sh -quickurl http://192.168.49.2:30001 -quickout zap_report.html -timeout 300
+
+      - name: Upload DAST Report
         uses: actions/upload-artifact@v3
         with:
-          name: OWASP-ZAP-Report
+          name: DAST-Report
           path: zap_report.html
        
 
-            #TRY
+            
