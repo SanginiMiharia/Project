@@ -45,18 +45,26 @@ jobs:
            password: ${{ secrets.DOCKER_PASSWORD }}
        - name: Check docker is working fine
          run: docker ps
-      
 
-       # Static Application Security Testing (SAST)
-       - name: Run SAST (SonarQube as an example)
+        # Step 4: Source Composition Analysis (SCA) with Trivy
+       - name: Run Source Composition Analysis with Trivy
          run: |
-           curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-           unzip sonar-scanner.zip -d sonar-scanner
-           ./sonar-scanner/bin/sonar-scanner \
-             -Dsonar.projectKey=my-project-key \
-             -Dsonar.sources=. \
-             -Dsonar.host.url=https://sonarcloud.io \
-             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            docker run --rm -v ${{ github.workspace }}:/repo aquasec/trivy fs /repo \
+            --severity CRITICAL,HIGH \
+            --exit-code 1 \
+            --output /repo/trivy_sca_report.txt
+
+    # Step 5: Upload SCA Report
+       - name: Upload SCA Report
+         uses: actions/upload-artifact@v3
+         with:
+          name: Trivy-SCA-Report
+          path: ./trivy_sca_report.txt
+
+
+    
+
+       
        - name: Build Docker image
          run: |
            docker build -t sanginimiharia2002/simple-webapp .
