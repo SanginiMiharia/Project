@@ -89,7 +89,7 @@ jobs:
           name: CodeQL-SARIF
           path: codeql-results.sarif
 
-          
+
        - name: Build Docker image
          run: |
            docker build -t sanginimiharia2002/simple-webapp .
@@ -113,7 +113,7 @@ jobs:
           chmod 600 ~/my_key.pem
 
       - name: SSH to EC2 with Minikube
-        run: ssh -i ~/my_key.pem -o StrictHostKeyChecking=no ubuntu@51.20.98.144
+        run: ssh -i ~/my_key.pem -o StrictHostKeyChecking=no ubuntu@16.171.116.27
 
       - name: Clone project
         run: git clone https://github.com/SanginiMiharia/Project.git
