@@ -143,12 +143,12 @@ jobs:
           helm upgrade --install simple-webapp ./helm-chart \
             --set image.repository=sanginimiharia2002/simple-webapp \
             --set image.tag=latest
-      # Step 4: DAST Scan with OWASP ZAP
+      # Step 4: DAST Scan with zaproxy ZAP
 
 
-      - name: Start OWASP ZAP
+      - name: Start ZAPROXY ZAP
         run: |
-          docker run -d -u zap -p 8080:8080 owasp/zap2docker-stable zap.sh -daemon -port 8080 -host 0.0.0.0 || exit 1
+          docker run -d -u zap -p 8080:8080 zaproxy/zap-stable zap.sh -daemon -port 8080 -host 0.0.0.0 || exit 1
           docker login -u sanginimiharia2002
 
 
@@ -159,7 +159,7 @@ jobs:
 
       - name: Run DAST Scan
         run: |
-          docker run --network host owasp/zap2docker-stable zap.sh -quickurl http://192.168.49.2:30001 -quickout zap_report.html -timeout 300
+          docker run --network host zaproxy/zap-stable zap.sh -quickurl http://192.168.49.2:30001 -quickout zap_report.html -timeout 300
 
       - name: Upload DAST Report
         uses: actions/upload-artifact@v3
