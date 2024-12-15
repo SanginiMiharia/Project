@@ -144,6 +144,14 @@ jobs:
             --set image.repository=sanginimiharia2002/simple-webapp \
             --set image.tag=latest
       # Step 4: DAST Scan with OWASP ZAP
+
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+          sudo systemctl start docker
+          sudo systemctl enable docker
+
       - name: Pull OWASP ZAP Docker Image
         run: docker pull owasp/zap2docker-stable:latest
 
