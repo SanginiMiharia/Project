@@ -89,12 +89,7 @@ jobs:
           name: CodeQL-SARIF
           path: codeql-results.sarif
 
-
-
-
-    
-
-       
+          
        - name: Build Docker image
          run: |
            docker build -t sanginimiharia2002/simple-webapp .
