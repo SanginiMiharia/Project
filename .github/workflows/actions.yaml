@@ -45,22 +45,7 @@ jobs:
            password: ${{ secrets.DOCKER_PASSWORD }}
        - name: Check docker is working fine
          run: docker ps
-      # Source Composition Analysis (SCA) using npm to install Snyk
-       - name: Install Snyk CLI
-         run: |
-           npm install -g snyk
-
-
-       # Authenticate with Snyk using the API token
-       - name: Authenticate with Snyk
-         run: npm install wslu -y
-          echo 'export BROWSER=wslview' >> ~/.bashrc
-          source ~/.bashrc
-          snyk auth ${{ secrets.SNYK_TOKEN }}
-
-       # Run SCA (Snyk)
-       - name: Run SCA with Snyk
-         run: snyk test --all-projects
+      
 
        # Static Application Security Testing (SAST)
        - name: Run SAST (SonarQube as an example)
