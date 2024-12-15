@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name:  simple-webapp
-        image: vaibhavrawat/simple-webapp
+        image: sanginimiharia2002/simple-webapp
         ports:
         - containerPort: 3000
         # envFrom:

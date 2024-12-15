@@ -144,17 +144,23 @@ jobs:
             --set image.repository=sanginimiharia2002/simple-webapp \
             --set image.tag=latest
       # Step 4: DAST Scan with OWASP ZAP
-      - name: Run DAST Scan with OWASP ZAP
-        run: |
-          docker run -u zap -v ${{ github.workspace }}:/zap/wrk/:rw \
-          -t owasp/zap2docker-stable zap-baseline.py \
-          -t http://your-app-url.com -g gen.conf -r dast_report.html
+      - name: Pull OWASP ZAP Docker Image
+        run: docker pull owasp/zap2docker-stable:latest
 
-      - name: Upload DAST Report
+      - name: Run OWASP ZAP Scan
+        run: |
+          docker run -u zap \
+          -v $(pwd):/zap/wrk/:rw \
+          owasp/zap2docker-stable:latest zap-baseline.py \
+          -t http://192.168.49.2:30001 \
+          -r zap_report.html
+      
+
+      - name: Upload ZAP Report
         uses: actions/upload-artifact@v3
         with:
-          name: DAST-Report
-          path: ./dast_report.html
+          name: OWASP-ZAP-Report
+          path: zap_report.html
        
 
             #TRY
