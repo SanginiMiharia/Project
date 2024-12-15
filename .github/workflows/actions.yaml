@@ -13,9 +13,8 @@ jobs:
       # Secret Scanning Step
        - name: Run Secret Scanning
          run: |
-           # Using Gitleaks as an example for secret scanning
-           curl -sSL https://raw.githubusercontent.com/zricethezav/gitleaks/master/scripts/install.sh | bash
-           gitleaks detect --source=. --verbose
+           docker run --rm -v ${{ github.workspace }}:/repo zricethezav/gitleaks:v8.2.7 detect --source=/repo --report=/repo/gitleaks_report.json
+           cat gitleaks_report.json || echo "No secrets found"
        - name: Add Docker's GPG key and repository
          run: >
            sudo apt-get update
