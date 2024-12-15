@@ -13,8 +13,8 @@ jobs:
       # Secret Scanning Step
        - name: Run Secret Scanning
          run: |
-           docker run --rm -v ${{ github.workspace }}:/repo zricethezav/gitleaks:v8.2.7 detect --source=/repo --report=/repo/gitleaks_report.json
-           cat gitleaks_report.json || echo "No secrets found"
+           docker run --rm -v ${{ github.workspace }}:/repo zricethezav/gitleaks:v8.2.7 detect --source=/repo --report-format=json --report-path=/repo/gitleaks_report.json
+
        - name: Add Docker's GPG key and repository
          run: >
            sudo apt-get update
