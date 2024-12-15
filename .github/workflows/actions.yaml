@@ -66,24 +66,27 @@ jobs:
        - name: Initialize CodeQL database
          uses: github/codeql-action/init@v2
          with:
-            languages: 'javascript'
-  
+          languages: 'javascript'
+
        - name: Perform CodeQL Analysis
          uses: github/codeql-action/analyze@v2
          with:
-            category: 'security'
-       - name: Perform CodeQL Analysis
-         uses: github/codeql-action/analyze@v2
-         with:
-            category: 'security'
+          category: 'security'
          env:
-              GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-    # Step 5: Upload SAST Report
-       - name: Upload CodeQL Analysis Results
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+       - name: Check SARIF File
+         run: |
+          echo "Checking if SARIF file exists..."
+          ls -l .github/workflows/codeql-results.sarif
+          cat .github/workflows/codeql-results.sarif || echo "SARIF file is empty or not generated."
+
+       - name: Upload SARIF File for Debugging
          uses: actions/upload-artifact@v3
          with:
-          name: CodeQL-Report
-          path: ./.github/workflows/codeql-results.sarif
+          name: CodeQL-SARIF
+          path: .github/workflows/codeql-results.sarif
+
 
 
 
