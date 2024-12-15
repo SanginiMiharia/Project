@@ -50,9 +50,13 @@ jobs:
          run: |
            npm install -g snyk
 
+
        # Authenticate with Snyk using the API token
        - name: Authenticate with Snyk
-         run: snyk auth ${{ secrets.SNYK_TOKEN }}
+         run: sudo apt install wslu
+          echo 'export BROWSER=wslview' >> ~/.bashrc
+          source ~/.bashrc
+          snyk auth ${{ secrets.SNYK_TOKEN }}
 
        # Run SCA (Snyk)
        - name: Run SCA with Snyk
