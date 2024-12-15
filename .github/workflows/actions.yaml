@@ -72,7 +72,7 @@ jobs:
         run: ls -la 
 
       - name: Go to Simple-webapp
-        run: cd Simple-webapp
+        run: cd simple-webapp
 
       - name: Pull docker image
         run: docker pull sanginimiharia2002/simple-webapp
